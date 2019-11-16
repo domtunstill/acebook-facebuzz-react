@@ -21,8 +21,37 @@ class SignInForm extends Component {
 
   handleClick(event) {
     event.preventDefault();
-    this.props.handleLogIn(this.state.email, this.state.password);
+    this.login();
   }
+
+  login () {
+    const email = this.state.email
+    const password = this.state.password
+    const request = {"auth": {"email": email, "password": password}}
+    console.log(request)
+    fetch('/api/user_token', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+      },
+      body: JSON.stringify({ request
+      })
+    })
+      .then(response=>console.log(response))
+      .then(this.props.getFeed)
+    // $.ajax({
+    //   url: "http://localhost:3000/api/user_token",
+    //   type: "POST",
+    //   data: request,
+    //   dataType: "json",
+    //   success: function (result) {
+    //     console.log(result)
+    //     localStorage.setItem("jwt", result.jwt)
+    //   }
+    // })
+  }
+
 
   render() {
     return (
@@ -30,6 +59,7 @@ class SignInForm extends Component {
           <input
             type="email"
             name="email"
+            id="email"
             placeholder="Email"
             className="form-control mr-2"
             value={this.state.email}
@@ -38,6 +68,7 @@ class SignInForm extends Component {
           <input
             type="password"
             name="password"
+            id="password"
             placeholder="Password"
             className="form-control mr-2"
             value={this.state.password}

@@ -14,6 +14,33 @@ class Post extends React.Component{
     this.postHTMLDisplay = this.postHTMLDisplay.bind(this)
   }
 
+  handleDeleteClick(event) {
+    event.preventDefault()
+    this.postDelete()
+  }
+
+  postDelete() {
+    fetch("/api/posts/"+this.props.id, 
+      {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
+      })
+      // .then(response => console.log(response))
+      // .then(this.props.getFeed())
+  }
+
+  handleEditClick(event) {
+    event.preventDefault()
+    this.postEdit()
+  }
+
+  postEdit() {
+    this.setState({editMode:true})
+  }
+
   postHTMLDisplay() {
     return (
       <div className="row mb-1 mt-3">
@@ -34,43 +61,13 @@ class Post extends React.Component{
     )
   }
 
-  handleDeleteClick(event) {
-    event.preventDefault()
-    this.postDelete()
-  }
-
-  handleEditClick(event) {
-    event.preventDefault()
-    this.postEdit()
-  }
-
-  postDelete() {
-      fetch("/api/posts/"+this.props.id, 
-        {
-          method: 'DELETE',
-          headers: {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json'
-          },
-        })
-        .then(response => console.log(response))
-        .then(this.props.getFeed)
-  }
-
-  postEdit() {
-    this.setState({editMode:true})
-  }
-
-
   render() {
     let postDisplay;
     if (this.state.editMode) {
-      postDisplay = <PostForm body={this.props.body} postId={this.props.id}/>
+      postDisplay = <PostForm body={this.props.body} postId={this.props.id} editMode={true}/>
     } else {
       postDisplay = this.postHTMLDisplay()
     }
-
-    console.log(postDisplay)
 
     return (
       <div>{postDisplay}</div>
